@@ -1,11 +1,11 @@
 # Ticker Tape
 ### A regulatory tracker skill
 
-A Claude Skill that builds and maintains a sourced, dated timeline of a regulatory, legislative, or litigation development — designed to accumulate history across sessions, not just produce a one-time snapshot.
+A Claude Skill that builds and maintains a sourced, dated timeline of a regulatory, legislative, or litigation development, designed to accumulate history across sessions, not just produce a one-time snapshot.
 
 ## The problem this solves
 
-Asking an AI assistant "what's the status of X regulation" repeatedly tends to produce a fresh, disconnected summary every time — useful in the moment, but with no sense of what's actually *changed* since you last checked, and no durable record of the development's history. This skill is built to behave more like a real tracker: each check-in adds to a permanent timeline rather than replacing it.
+Asking an AI assistant "what's the status of X regulation" repeatedly tends to produce a fresh, disconnected summary every time, useful in the moment, but with no sense of what's actually *changed* since you last checked, and no durable record of the development's history. This skill is built to behave more like a real tracker: each check-in adds to a permanent timeline rather than replacing it.
 
 ## The architectural problem, and how this skill solves it
 
@@ -18,7 +18,7 @@ This skill solves that by moving the memory into the artifact itself, rather tha
 3. **The artifact, on every mount, loads whatever is already stored** for that topic and merges the freshly-researched entries in by ID — anything already present is left alone; anything new is added and visually flagged.
 4. **The merged result is written back to storage**, so the permanent record grows over time even though Claude itself never "remembers" anything between sessions.
 
-The practical effect: you can ask about the same topic next week, next month, or from an entirely new conversation, and the tracker will correctly show only the genuinely new developments highlighted — without Claude needing any continuity at all. The intelligence is in the merge logic, not in Claude's memory.
+The practical effect: you can ask about the same topic next week, next month, or from an entirely new conversation, and the tracker will correctly show only the genuinely new developments highlighted, without Claude needing any continuity at all. The intelligence is in the merge logic, not in Claude's memory.
 
 ## How it works
 
@@ -32,7 +32,7 @@ The skill pulls from authoritative primary sources rather than assembling status
 Every development found gets a deterministic ID. This is the linchpin of the whole design — get this wrong (e.g., inconsistent date formatting) and the merge logic will either create duplicates or fail to recognize something as new.
 
 ### 4. Handoff to the artifact
-Claude builds the data object — current status, the full entry list (not just what it thinks is new; the artifact figures that out), and any open/contested questions — and saves it as a `.jsx` artifact. The merge and persistence happen entirely in the artifact's own code from there.
+Claude builds the data object: current status, the full entry list (not just what it thinks is new; the artifact figures that out), and any open/contested questions — and saves it as a `.jsx` artifact. The merge and persistence happen entirely in the artifact's own code from there.
 
 ### 5. Multi-topic support
 The artifact can track several subjects at once, presented as tabs, and on mount it also checks storage for any previously-tracked topics that weren't part of this session's research, so a dashboard of everything you've ever tracked stays intact even if a given session only refreshes one of them.
